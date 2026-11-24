@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="mn" class="light" style="color-scheme: light only;">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light only">
+  <title>EYFEL EAU DE PARFUM | Mongolia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light only; }
+    html, body {
+      background-color: #F4F5F7 !important;
+      color: #09090B !important;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      max-width: 1240px;
+      margin: 0 auto;
+      letter-spacing: 0.015em;
+    }
+    .font-serif-lux { font-family: 'Cormorant Garamond', serif; }
+    .pearl-card {
+      background: linear-gradient(160deg, #FFFFFF 0%, #EEF0F4 100%);
+      border: 1.5px solid #D8DDE6;
+      transition: all 0.25s ease;
+    }
+    .pearl-card:hover {
+      border-color: #09090B;
+      box-shadow: 0 16px 30px -12px rgba(9, 9, 11, 0.14);
+    }
+    .silver-banner {
+      background: radial-gradient(circle at 85% 20%, #FFFFFF 0%, #E5E8EE 50%, #D2D7E0 100%);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="antialiased selection:bg-zinc-950 selection:text-white">
+
+  <!-- Дээд зарлал -->
+  <div style="background-color:#09090B; color:#FFFFFF;" class="text-[11px] py-2.5 px-4 text-center tracking-[0.22em] uppercase font-bold">
+    Хот дотор хүргэлт 7,000₮ &nbsp;•&nbsp; 150,000₮-с дээш хүргэлт үнэгүй
+  </div>
+
+  <!-- Толгой цэс (Лого дээр 3 товшиход Админ нээгдэнэ) -->
+  <header style="background-color:#FFFFFF;" class="sticky top-0 z-40 border-b border-slate-300 shadow-xs">
+    <div class="px-4 sm:px-8 h-24 sm:h-28 flex items-center justify-between gap-2">
+      
+      <!-- Гар утасны цэс -->
+      <button onclick="toggleMenu()" class="lg:hidden p-2 -ml-1 text-zinc-950" aria-label="Цэс">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <!-- Томруулсан тод EYFEL EAU DE PARFUM лого (3 товшиж админ орох) -->
+      <div onclick="handleLogoTripleTap()" class="flex items-center shrink-0 cursor-pointer select-none" aria-label="EYFEL Eau De Parfum">
+        <svg class="h-14 sm:h-16 w-auto" viewBox="0 0 260 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="130" y="48" text-anchor="middle" fill="#09090B" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="52" letter-spacing="10">EYFEL</text>
+          <line x1="16" y1="59" x2="244" y2="59" stroke="#09090B" stroke-width="2.6"/>
+          <line x1="16" y1="65" x2="244" y2="65" stroke="#09090B" stroke-width="1.6"/>
+          <text x="132" y="83" text-anchor="middle" fill="#09090B" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="14" letter-spacing="7.2">EAU DE PARFUM</text>
+        </svg>
+      </div>
+
+      <!-- Компьютерийн цэс -->
+      <nav class="hidden lg:flex items-center space-x-7 text-xs font-bold tracking-[0.16em] uppercase text-zinc-900">
+        <button onclick="filterCategory('all')" class="hover:text-slate-600 transition">Бүгд</button>
+        <button onclick="filterCategory('eyfel-perfume')" class="hover:text-slate-600 transition">Eyfel Сүрчиг</button>
+        <button onclick="filterCategory('bighill')" class="hover:text-slate-600 transition">Bighill Niche</button>
+        <button onclick="filterCategory('diffuser')" class="hover:text-slate-600 transition">Диффузер</button>
+        <button onclick="filterCategory('car')" class="hover:text-slate-600 transition">Авто үнэр</button>
+        <button onclick="filterCategory('bundle')" class="hover:text-slate-600 transition">Багцууд</button>
+      </nav>
+
+      <!-- Сагс товч -->
+      <button onclick="toggleCart()" style="background-color:#09090B; color:#FFFFFF;" class="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold hover:bg-zinc-800 transition shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <span id="cart-count">0</span>
+      </button>
+    </div>
+
+    <!-- Гар утасны унадаг цэс -->
+    <div id="mobile-menu" style="background-color:#FFFFFF;" class="hidden lg:hidden border-t border-slate-200 px-6 py-5 space-y-3.5 text-xs font-bold uppercase tracking-[0.18em] text-zinc-900">
+      <button onclick="filterCategory('all'); toggleMenu()" class="block w-full text-left py-1.5">Бүх бүтээгдэхүүн</button>
+      <button onclick="filterCategory('eyfel-perfume'); toggleMenu()" class="block w-full text-left py-1.5">Eyfel Сүрчиг</button>
+      <button onclick="filterCategory('bighill'); toggleMenu()" class="block w-full text-left py-1.5">Bighill Niche Цуглуулга</button>
+      <button onclick="filterCategory('diffuser'); toggleMenu()" class="block w-full text-left py-1.5">Гэрийн диффузер (120мл)</button>
+      <button onclick="filterCategory('car'); toggleMenu()" class="block w-full text-left py-1.5">Машины үнэртүүлэгч</button>
+      <button onclick="filterCategory('bundle'); toggleMenu()" class="block w-full text-left py-1.5">Хямдралтай багцууд</button>
+    </div>
+  </header>
+
+  <!-- Админ нэвтэрсэн үед дээр харагдах Шууд Бараа Нэмэх Самбар -->
+  <section id="inline-admin-bar" class="hidden bg-white border-b-2 border-zinc-950 px-5 sm:px-10 py-6 shadow-md">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+      <div>
+        <span class="bg-zinc-950 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded">Admin Mode</span>
+        <span id="admin-logged-email" class="text-xs font-bold text-zinc-800 ml-2"></span>
+      </div>
+      <button onclick="handleAdminLogout()" class="text-xs font-bold text-red-600 border border-red-200 px-3.5 py-1.5 rounded-full hover:bg-red-50">
+        Системээс гарах
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Шинэ бараа нэмэх форм -->
+      <form onsubmit="adminAddProduct(event)" class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <h3 class="sm:col-span-2 font-extrabold uppercase tracking-wider text-zinc-950">+ Шинэ бараа нэмэх</h3>
+        
+        <input type="text" id="new-name" required placeholder="Барааны нэр (жнь: Eyfel W-72 50мл)"
+          style="background-color:#FFFFFF; color:#09090B;" class="px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+
+        <select id="new-category" style="background-color:#FFFFFF; color:#09090B;" class="px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold">
+          <option value="eyfel-perfume">Eyfel Сүрчиг</option>
+          <option value="bighill">Bighill Niche</option>
+          <option value="diffuser">Гэрийн диффузер (120мл)</option>
+          <option value="car">Машины үнэртүүлэгч</option>
+          <option value="bundle">Хямдралтай багц</option>
+        </select>
+
+        <input type="number" id="new-price" required placeholder="Үнэ (жнь: 35000)"
+          style="background-color:#FFFFFF; color:#09090B;" class="px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+
+        <input type="url" id="new-image" placeholder="Зургийн линк (https://...)"
+          style="background-color:#FFFFFF; color:#09090B;" class="px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+
+        <input type="text" id="new-desc" placeholder="Үнэрийн тайлбар (жнь: Жимслэг, зөөлөн үнэртэй)"
+          style="background-color:#FFFFFF; color:#09090B;" class="sm:col-span-2 px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+
+        <button type="submit" style="background-color:#09090B; color:#FFFFFF;" class="sm:col-span-2 py-3 rounded-xl font-bold uppercase tracking-widest hover:bg-zinc-800 transition">
+          Барааг нэмэх
+        </button>
+      </form>
+
+      <!-- Баннер зураг солих -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between text-xs space-y-3">
+        <div>
+          <h3 class="font-extrabold uppercase tracking-wider text-zinc-950 mb-2">Нүүр баннер зураг солих</h3>
+          <input type="url" id="banner-url-input" placeholder="Зургийн линк оруулах..."
+            style="background-color:#FFFFFF; color:#09090B;" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+        </div>
+        <button onclick="updateBannerImage()" style="background-color:#09090B; color:#FFFFFF;" class="w-full py-3 rounded-xl font-bold uppercase tracking-widest hover:bg-zinc-800 transition">
+          Баннер хадгалах
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Нүүр Баннер -->
+  <section class="silver-banner px-6 py-14 sm:py-20 sm:px-12 border-b border-slate-300">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-7 space-y-5">
+        <p style="color:#334155;" class="text-xs font-extrabold uppercase tracking-[0.3em]">
+          EYFEL &amp; BIGHILL MONGOLIA
+        </p>
+        <h1 style="color:#09090B;" class="text-3xl sm:text-5xl font-serif-lux font-bold leading-[1.18]">
+          Мөч бүрийг онцгой болгох <br>
+          <span class="italic text-zinc-800">цэвэр, тансаг үнэр</span>
+        </h1>
+        <p style="color:#1E293B;" class="text-xs sm:text-sm leading-relaxed max-w-lg font-medium">
+          Дэлхийн алдарт сүрчигнээс сэдэвлэсэн EYFEL болон өндөр зэрэглэлийн BIGHILL ниш цуглуулгыг албан ёсны эрхтэйгээр танд хүргэж байна.
+        </p>
+        <div class="pt-2 flex flex-wrap gap-3.5">
+          <a href="#catalog" style="background-color:#09090B; color:#FFFFFF;" class="px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] hover:bg-zinc-800 transition shadow-sm">
+            Цуглуулга үзэх
+          </a>
+          <button onclick="filterCategory('bundle')" style="background-color:#FFFFFF; color:#09090B;" class="border-2 border-zinc-950 px-7 py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.18em] hover:bg-zinc-100 transition">
+            Багц сонгох
+          </button>
+        </div>
+      </div>
+
+      <!-- Баннерын зураг эсвэл сувдан шилэн карт -->
+      <div class="lg:col-span-5">
+        <div id="hero-banner-display" style="background-color:rgba(255,255,255,0.85);" class="border border-white rounded-3xl overflow-hidden shadow-md">
+          <div class="p-8 sm:p-10 text-center">
+            <p class="text-[11px] font-bold uppercase tracking-[0.32em] text-slate-600 mb-2">Signature Collection</p>
+            <p class="font-serif-lux italic font-bold text-3xl text-zinc-950">The Art of Scent</p>
+            <div class="w-14 h-[2px] bg-zinc-900 mx-auto my-4"></div>
+            <p class="text-xs font-semibold text-zinc-700 leading-relaxed">
+              Эрэгтэй • Эмэгтэй • Unisex сүрчиг болон гэрийн үнэртүүлэгчийн шинэ цуглуулга
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ангилал & Хайлт -->
+  <section id="catalog" class="px-5 sm:px-10 pt-12 pb-20">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-10">
+      <div class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-1">
+        <button onclick="filterCategory('all', this)" class="cat-btn bg-zinc-950 text-white px-5 py-2.5 rounded-full text-xs font-bold tracking-wider whitespace-nowrap transition">Бүгд</button>
+        <button onclick="filterCategory('eyfel-perfume', this)" class="cat-btn bg-white border border-slate-300 text-zinc-900 px-5 py-2.5 rounded-full text-xs font-bold tracking-wider whitespace-nowrap hover:border-zinc-900 transition">Eyfel Сүрчиг</button>
+        <button onclick="filterCategory('bighill', this)" class="cat-btn bg-white border border-slate-300 text-zinc-900 px-5 py-2.5 rounded-full text-xs font-bold tracking-wider whitespace-nowrap hover:border-zinc-900 transition">Bighill Niche</button>
+        <button onclick="filterCategory('diffuser', this)" class="cat-btn bg-white border border-slate-300 text-zinc-900 px-5 py-2.5 rounded-full text-xs font-bold tracking-wider whitespace-nowrap hover:border-zinc-900 transition">Диффузер (120мл)</button>
+        <button onclick="filterCategory('car', this)" class="cat-btn bg-white border border-slate-300 text-zinc-900 px-5 py-2.5 rounded-full text-xs font-bold tracking-wider whitespace-nowrap hover:border-zinc-900 transition">Авто үнэр</button>
+        <button onclick="filterCategory('bundle', this)" class="cat-btn bg-white border border-slate-300 text-zinc-900 px-5 py-2.5 rounded-full text-xs font-bold tracking-wider whitespace-nowrap hover:border-zinc-900 transition">Багцууд</button>
+      </div>
+
+      <input type="text" id="search-input" oninput="renderProducts()" placeholder="Үнэр эсвэл код хайх (жнь: W-72, Angel)..."
+        style="background-color:#FFFFFF; color:#09090B;"
+        class="w-full md:w-72 px-5 py-2.5 rounded-full border border-slate-300 text-xs font-semibold focus:outline-none focus:border-zinc-950">
+    </div>
+
+    <!-- Бүтээгдэхүүний сүлжээ -->
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-7"></div>
+  </section>
+
+  <!-- Хөл хэсэг -->
+  <footer style="background-color:#09090B; color:#E2E8F0;" class="px-6 sm:px-12 py-14 text-xs">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 pb-10 border-b border-zinc-800 leading-relaxed">
+      <div>
+        <h3 class="font-serif-lux text-2xl font-bold tracking-[0.22em] text-white mb-3">EYFEL MONGOLIA</h3>
+        <p class="text-zinc-300 font-medium">
+          Туркийн алдарт Eyfel болон Bighill брэндийн үнэртэй ус, гэрийн болон машины үнэртүүлэгчийн албан ёсны каталог.
+        </p>
+      </div>
+      <div>
+        <h4 class="font-bold uppercase tracking-[0.2em] text-white mb-3">Хүргэлт &amp; Төлбөр</h4>
+        <p class="text-zinc-300 font-medium">Улаанбаатар хот дотор 24 цагт хүргэнэ.</p>
+        <p class="text-zinc-300 font-medium mt-1">Хүргэлт: 7,000₮ (150,000₮+ үнэгүй).</p>
+      </div>
+      <div>
+        <h4 class="font-bold uppercase tracking-[0.2em] text-white mb-3">Холбоо барих</h4>
+        <p class="text-zinc-300 font-medium">Цагийн хуваарь: 10:00 – 19:00</p>
+        <p class="text-zinc-300 font-medium mt-1">Instagram / Facebook: @eyfelmongolia</p>
+      </div>
+    </div>
+    <div class="pt-7 flex items-center justify-between text-[11px] font-semibold tracking-widest text-zinc-400">
+      <span>© 2026 EYFEL MONGOLIA</span>
+      <span>EAU DE PARFUM</span>
+    </div>
+  </footer>
+
+  <!-- Сагсны цонх -->
+  <div id="cart-drawer" class="fixed inset-0 z-50 hidden">
+    <div onclick="toggleCart()" class="absolute inset-0 bg-zinc-950/60"></div>
+    <div style="background-color:#FFFFFF; color:#09090B;" class="absolute right-0 top-0 h-full w-full max-w-md shadow-2xl flex flex-col justify-between p-6 sm:p-7">
+      <div>
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+          <h3 class="text-xs font-extrabold uppercase tracking-[0.22em]">Таны сагс</h3>
+          <button onclick="toggleCart()" class="text-2xl leading-none text-zinc-500 hover:text-zinc-950">&times;</button>
+        </div>
+
+        <div id="shipping-box" style="background-color:#F1F5F9; color:#09090B;" class="rounded-xl p-3.5 mt-4 text-xs font-semibold">
+          Үнэгүй хүргэлт авахад <strong>150,000₮</strong> дутуу байна.
+        </div>
+
+        <div id="cart-items" class="mt-4 space-y-3.5 max-h-[42vh] overflow-y-auto text-xs"></div>
+      </div>
+
+      <div class="border-t border-slate-200 pt-4 space-y-3">
+        <div class="space-y-1 text-xs font-semibold">
+          <div class="flex justify-between text-zinc-600">
+            <span>Барааны дүн:</span>
+            <span id="subtotal-price">0₮</span>
+          </div>
+          <div class="flex justify-between text-zinc-600">
+            <span>Хүргэлт:</span>
+            <span id="shipping-price">7,000₮</span>
+          </div>
+          <div class="flex justify-between text-sm font-extrabold pt-2 border-t border-slate-200">
+            <span>Нийт төлөх:</span>
+            <span id="total-price">0₮</span>
+          </div>
+        </div>
+
+        <input type="tel" id="customer-phone" placeholder="Утасны дугаар"
+          style="background-color:#F4F5F7; color:#09090B;"
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 text-xs font-semibold">
+        <input type="text" id="customer-address" placeholder="Хүргэлтийн хаяг (Дүүрэг, хороо, байр, тоот)"
+          style="background-color:#F4F5F7; color:#09090B;"
+          class="w-full px-4 py-3 rounded-xl border border-slate-300 text-xs font-semibold">
+
+        <button onclick="submitOrder()" style="background-color:#09090B; color:#FFFFFF;" class="w-full py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-zinc-800 transition">
+          Захиалга баталгаажуулах
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Админ Нэвтрэх Цонх (Лого дээр 3 удаа товшиход нээгдэнэ) -->
+  <div id="admin-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div onclick="closeAdmin()" class="fixed inset-0 bg-zinc-950/65"></div>
+    <div style="background-color:#FFFFFF; color:#09090B;" class="relative max-w-sm mx-auto mt-20 p-7 rounded-3xl border border-slate-200 shadow-2xl z-10">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-5">
+        <h2 class="text-sm font-extrabold tracking-[0.2em] uppercase">EYFEL Админ</h2>
+        <button onclick="closeAdmin()" class="text-2xl text-zinc-500 hover:text-zinc-950">&times;</button>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-zinc-800 mb-1.5">И-мэйл хаяг</label>
+          <input type="email" id="admin-email" required placeholder="admin@eyfel.mn"
+            style="background-color:#F4F5F7; color:#09090B;"
+            class="w-full px-4 py-3 rounded-xl border border-slate-300 font-semibold">
+        </div>
+        <div>
+          <label class="block font-bold text-zinc-800 mb-1.5">Нууц үг</label>
+          <input type="password" id="admin-password" required placeholder="••••••••"
+            style="background-color:#F4F5F7; color:#09090B;"
+            class="w-full px-4 py-3 rounded-xl border border-slate-300 font-semibold">
+        </div>
+        <p id="admin-error" class="text-red-600 text-[11px] font-bold hidden"></p>
+        <button type="submit" style="background-color:#09090B; color:#FFFFFF;" class="w-full py-3.5 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-zinc-800 transition">
+          Нэвтрэх
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://xrcwbcxzezlyakubugbu.supabase.co';
+    const SUPABASE_KEY = 'Sb_publishable_bQNdfGZZvs-lldXhGhVpaA_UlofuWZ5';
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const CATEGORY_LABELS = {
+      'eyfel-perfume': 'EYFEL СҮРЧИГ',
+      'bighill': 'BIGHILL NICHE',
+      'diffuser': 'ДИФФУЗЕР',
+      'car': 'АВТО ҮНЭР',
+      'bundle': 'БАГЦ'
+    };
+
+    let products = [
+      { id: 1, name: 'Eyfel W-72 (50мл)', category: 'eyfel-perfume', price: 35000, desc: 'Цэцэгс, жимсний зөөлөн эмэгтэйлэг үнэр', image: '' },
+      { id: 2, name: 'Eyfel M-6 (50мл)', category: 'eyfel-perfume', price: 35000, desc: 'Сэргэг, цэвэрхэн модлог үнэр', image: '' },
+      { id: 3, name: 'Bighill Niche W-23 (100мл)', category: 'bighill', price: 85000, desc: 'Удаан тогтоцтой премиум ниш сүрчиг', image: '' },
+      { id: 4, name: 'Eyfel Reed Diffuser — Angel', category: 'diffuser', price: 25000, desc: 'Гэрийн савхтай үнэртүүлэгч (120мл)', image: '' },
+      { id: 5, name: 'Eyfel Reed Diffuser — Ocean', category: 'diffuser', price: 25000, desc: 'Далайн цэнгэг агаарын үнэр (120мл)', image: '' },
+      { id: 6, name: 'Eyfel Car Spray — Cotton', category: 'car', price: 15000, desc: 'Машины цэвэрхэн даавуун үнэр', image: '' },
+      { id: 7, name: 'Eyfel Silver Mix Багц', category: 'bundle', price: 65000, desc: 'Сүрчиг + Диффузер + Авто үнэр', image: '' },
+      { id: 8, name: 'Bighill Хос Сүрчигний Багц', category: 'bundle', price: 155000, desc: 'M6 & W72 (Хүргэлт үнэгүй)', image: '' }
+    ];
+
+    let currentCategory = 'all';
+    let isAdminLoggedIn = false;
+    let cart = JSON.parse(localStorage.getItem('eyfel_cart') || '[]');
+    let logoTapCount = 0;
+    let logoTapTimer = null;
+
+    // Лого дээр 3 удаа товшиход админ цонх нээх (Doctor Li шиг)
+    function handleLogoTripleTap() {
+      logoTapCount++;
+      clearTimeout(logoTapTimer);
+      logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1000);
+
+      if (logoTapCount >= 3) {
+        logoTapCount = 0;
+        openAdmin();
+      }
+    }
+
+    async function loadProductsFromDB() {
+      try {
+        const { data, error } = await db.from('eyfel_products').select('*').order('id', { ascending: false });
+        if (!error && data && data.length > 0) {
+          products = data;
+          renderProducts();
+        }
+      } catch (e) {}
+    }
+
+    function filterCategory(cat, btnEl) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-zinc-950', 'text-white');
+        btn.classList.add('bg-white', 'text-zinc-900', 'border', 'border-slate-300');
+      });
+      if (btnEl) {
+        btnEl.classList.add('bg-zinc-950', 'text-white');
+        btnEl.classList.remove('bg-white', 'text-zinc-900');
+      }
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const grid = document.getElementById('product-grid');
+
+      const filtered = products.filter(p => {
+        const matchCat = currentCategory === 'all' || p.category === currentCategory;
+        const matchText = p.name.toLowerCase().includes(q) || (p.desc || '').toLowerCase().includes(q);
+        return matchCat && matchText;
+      });
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="pearl-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between relative">
+          ${isAdminLoggedIn ? `
+            <button onclick="adminDeleteProduct(${p.id})" class="absolute top-3 right-3 z-10 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
+              Устгах
+            </button>
+          ` : ''}
+          <div>
+            <div class="aspect-square rounded-xl bg-slate-200/70 border border-slate-300/70 mb-3.5 overflow-hidden flex items-center justify-center">
+              ${p.image
+                ? `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">`
+                : `<span class="font-serif-lux italic font-bold text-slate-500 text-xl tracking-[0.2em]">EYFEL</span>`}
+            </div>
+            <span style="color:#334155;" class="text-[10px] font-extrabold uppercase tracking-[0.2em] block mb-1">
+              ${CATEGORY_LABELS[p.category] || p.category}
+            </span>
+            <h3 style="color:#09090B;" class="text-sm font-bold leading-snug">
+              ${p.name}
+            </h3>
+            <p style="color:#334155;" class="text-xs font-medium leading-relaxed mt-1 line-clamp-2">
+              ${p.desc || ''}
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-200">
+            <p style="color:#09090B;" class="text-sm font-extrabold mb-2.5">
+              ${Number(p.price).toLocaleString()}₮
+            </p>
+            <button onclick="addToCart(${p.id})" style="background-color:#09090B; color:#FFFFFF;" class="w-full py-2.5 rounded-full text-[11px] font-bold uppercase tracking-[0.18em] hover:bg-zinc-800 transition">
+              Сагсанд хийх
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(id) {
+      const item = products.find(p => p.id === id);
+      if (!item) return;
+      const exist = cart.find(c => c.id === id);
+      if (exist) exist.qty += 1;
+      else cart.push({ ...item, qty: 1 });
+      saveCart();
+      document.getElementById('cart-drawer').classList.remove('hidden');
+    }
+
+    function removeCart(idx) {
+      cart.splice(idx, 1);
+      saveCart();
+    }
+
+    function saveCart() {
+      localStorage.setItem('eyfel_cart', JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const box = document.getElementById('cart-items');
+      let sub = 0, qty = 0;
+
+      if (cart.length === 0) {
+        box.innerHTML = '<p class="text-center text-zinc-500 font-semibold py-10">Таны сагс хоосон байна.</p>';
+      } else {
+        box.innerHTML = cart.map((c, i) => {
+          sub += c.price * c.qty;
+          qty += c.qty;
+          return `
+            <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+              <div>
+                <p class="font-bold text-zinc-950">${c.name}</p>
+                <p class="text-zinc-600 font-semibold">${c.price.toLocaleString()}₮ × ${c.qty}</p>
+              </div>
+              <button onclick="removeCart(${i})" class="text-red-600 text-xs font-bold">Устгах</button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const ship = sub === 0 ? 0 : (sub >= 150000 ? 0 : 7000);
+      document.getElementById('cart-count').textContent = qty;
+      document.getElementById('subtotal-price').textContent = sub.toLocaleString() + '₮';
+      document.getElementById('shipping-price').textContent = ship === 0 && sub > 0 ? 'ҮНЭГҮЙ' : ship.toLocaleString() + '₮';
+      document.getElementById('total-price').textContent = (sub + ship).toLocaleString() + '₮';
+
+      const shipBox = document.getElementById('shipping-box');
+      if (sub >= 150000) {
+        shipBox.innerHTML = 'Танд <strong>ҮНЭГҮЙ ХҮРГЭЛТ</strong> эрх нээгдлээ.';
+      } else {
+        shipBox.innerHTML = `Үнэгүй хүргэлт авахад <strong>${(150000 - sub).toLocaleString()}₮</strong> дутуу байна.`;
+      }
+    }
+
+    function submitOrder() {
+      const phone = document.getElementById('customer-phone').value.trim();
+      const address = document.getElementById('customer-address').value.trim();
+      if (cart.length === 0) return alert('Сагс хоосон байна.');
+      if (!phone || !address) return alert('Утасны дугаар болон хаягаа оруулна уу.');
+
+      alert(`Баярлалаа! Таны захиалга бүртгэгдлээ.\nУтас: ${phone}\nБид удахгүй холбогдож баталгаажуулна.`);
+      cart = [];
+      saveCart();
+      toggleCart();
+    }
+
+    // Админ хэсэг
+    async function checkAdminSession() {
+      const { data: { session } } = await db.auth.getSession();
+      if (session) {
+        enableAdminMode(session.user.email);
+      }
+    }
+
+    function openAdmin() {
+      if (isAdminLoggedIn) {
+        document.getElementById('inline-admin-bar').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      document.getElementById('admin-modal').classList.remove('hidden');
+    }
+
+    function closeAdmin() {
+      document.getElementById('admin-modal').classList.add('hidden');
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value;
+      const password = document.getElementById('admin-password').value;
+      const errEl = document.getElementById('admin-error');
+
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+      if (error) {
+        errEl.textContent = 'И-мэйл эсвэл нууц үг буруу байна.';
+        errEl.classList.remove('hidden');
+      } else {
+        errEl.classList.add('hidden');
+        closeAdmin();
+        enableAdminMode(data.user.email);
+      }
+    }
+
+    function enableAdminMode(email) {
+      isAdminLoggedIn = true;
+      document.getElementById('inline-admin-bar').classList.remove('hidden');
+      document.getElementById('admin-logged-email').textContent = email;
+      renderProducts();
+    }
+
+    async function handleAdminLogout() {
+      await db.auth.signOut();
+      isAdminLoggedIn = false;
+      document.getElementById('inline-admin-bar').classList.add('hidden');
+      renderProducts();
+    }
+
+    async function adminAddProduct(e) {
+      e.preventDefault();
+      const newItem = {
+        name: document.getElementById('new-name').value,
+        category: document.getElementById('new-category').value,
+        price: Number(document.getElementById('new-price').value),
+        image: document.getElementById('new-image').value,
+        desc: document.getElementById('new-desc').value
+      };
+
+      const { error } = await db.from('eyfel_products').insert([newItem]);
+      if (error) {
+        alert('Supabase алдаа: ' + error.message);
+      } else {
+        e.target.reset();
+        await loadProductsFromDB();
+        alert('Бараа амжилттай нэмэгдлээ!');
+      }
+    }
+
+    async function adminDeleteProduct(id) {
+      if (!confirm('Энэ барааг устгах уу?')) return;
+      await db.from('eyfel_products').delete().eq('id', id);
+      await loadProductsFromDB();
+    }
+
+    function updateBannerImage() {
+      const url = document.getElementById('banner-url-input').value.trim();
+      if (!url) return alert('Зургийн линк оруулна уу.');
+      localStorage.setItem('eyfel_banner', url);
+      applySavedBanner();
+      alert('Баннер зураг солигдлоо!');
+    }
+
+    function applySavedBanner() {
+      const saved = localStorage.getItem('eyfel_banner');
+      if (saved) {
+        document.getElementById('hero-banner-display').innerHTML = `
+          <img src="${saved}" alt="EYFEL Banner" class="w-full h-64 sm:h-80 object-cover">
+        `;
+      }
+    }
+
+    function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+    function toggleCart() { document.getElementById('cart-drawer').classList.toggle('hidden'); }
+
+    applySavedBanner();
+    renderProducts();
+    updateCartUI();
+    loadProductsFromDB();
+    checkAdminSession();
+  </script>
+</body>
+</html>
