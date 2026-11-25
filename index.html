@@ -41,18 +41,16 @@
     Хот дотор хүргэлт 7,000₮ &nbsp;•&nbsp; 150,000₮-с дээш хүргэлт үнэгүй
   </div>
 
-  <!-- Толгой цэс (Лого дээр 3 товшиход Админ нээгдэнэ) -->
+  <!-- Толгой цэс -->
   <header style="background-color:#FFFFFF;" class="sticky top-0 z-40 border-b border-slate-300 shadow-xs">
     <div class="px-4 sm:px-8 h-24 sm:h-28 flex items-center justify-between gap-2">
-      
-      <!-- Гар утасны цэс -->
       <button onclick="toggleMenu()" class="lg:hidden p-2 -ml-1 text-zinc-950" aria-label="Цэс">
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
 
-      <!-- EYFEL EAU DE PARFUM лого (3 товшиж админ орох) -->
+      <!-- EYFEL EAU DE PARFUM лого (3 товшиж админ нээх) -->
       <div onclick="handleLogoTripleTap()" class="flex items-center shrink-0 cursor-pointer select-none" aria-label="EYFEL Eau De Parfum">
         <svg class="h-14 sm:h-16 w-auto" viewBox="0 0 260 90" fill="none" xmlns="http://www.w3.org/2000/svg">
           <text x="130" y="48" text-anchor="middle" fill="#09090B" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="52" letter-spacing="10">EYFEL</text>
@@ -62,7 +60,6 @@
         </svg>
       </div>
 
-      <!-- Компьютерийн цэс -->
       <nav class="hidden lg:flex items-center space-x-7 text-xs font-bold tracking-[0.16em] uppercase text-zinc-900">
         <button onclick="filterCategory('all')" class="hover:text-slate-600 transition">Бүгд</button>
         <button onclick="filterCategory('eyfel-perfume')" class="hover:text-slate-600 transition">Eyfel Сүрчиг</button>
@@ -72,7 +69,6 @@
         <button onclick="filterCategory('bundle')" class="hover:text-slate-600 transition">Багцууд</button>
       </nav>
 
-      <!-- Сагс товч -->
       <button onclick="toggleCart()" style="background-color:#09090B; color:#FFFFFF;" class="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold hover:bg-zinc-800 transition shadow-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -81,7 +77,6 @@
       </button>
     </div>
 
-    <!-- Гар утасны унадаг цэс -->
     <div id="mobile-menu" style="background-color:#FFFFFF;" class="hidden lg:hidden border-t border-slate-200 px-6 py-5 space-y-3.5 text-xs font-bold uppercase tracking-[0.18em] text-zinc-900">
       <button onclick="filterCategory('all'); toggleMenu()" class="block w-full text-left py-1.5">Бүх бүтээгдэхүүн</button>
       <button onclick="filterCategory('eyfel-perfume'); toggleMenu()" class="block w-full text-left py-1.5">Eyfel Сүрчиг</button>
@@ -92,22 +87,34 @@
     </div>
   </header>
 
-  <!-- Админ нэвтэрсэн үед дээр харагдах Шууд Бараа Нэмэх Самбар -->
-  <section id="inline-admin-bar" class="hidden bg-white border-b-2 border-zinc-950 px-5 sm:px-10 py-6 shadow-md">
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
-      <div>
+  <!-- АДМИН ЦЭГЦТЭЙ УДИРДЛАГЫН ПАНЕЛЬ -->
+  <section id="inline-admin-bar" class="hidden bg-white border-b-2 border-zinc-950 px-4 sm:px-10 py-6 shadow-md">
+    <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200">
+      <div class="flex items-center gap-2 flex-wrap">
         <span class="bg-zinc-950 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded">Admin Mode</span>
-        <span id="admin-logged-email" class="text-xs font-bold text-zinc-800 ml-2"></span>
+        <span id="admin-logged-email" class="text-xs font-bold text-zinc-800"></span>
       </div>
       <button onclick="handleAdminLogout()" class="text-xs font-bold text-red-600 border border-red-200 px-3.5 py-1.5 rounded-full hover:bg-red-50">
         Системээс гарах
       </button>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Админ табууд -->
+    <div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar text-xs font-bold">
+      <button onclick="switchAdminTab('products')" id="tab-btn-products" class="admin-tab-btn bg-zinc-950 text-white px-4 py-2.5 rounded-xl whitespace-nowrap">
+        Бараа &amp; Баннер
+      </button>
+      <button onclick="switchAdminTab('orders')" id="tab-btn-orders" class="admin-tab-btn bg-slate-100 text-zinc-800 px-4 py-2.5 rounded-xl whitespace-nowrap flex items-center gap-2">
+        Захиалгууд
+        <span id="admin-order-badge" class="bg-zinc-950 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
+      </button>
+    </div>
+
+    <!-- Таб 1: Бараа нэмэх & Баннер -->
+    <div id="admin-tab-products" class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-5">
       <form onsubmit="adminAddProduct(event)" class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200">
         <h3 class="sm:col-span-2 font-extrabold uppercase tracking-wider text-zinc-950">+ Шинэ бараа нэмэх</h3>
-        
+
         <input type="text" id="new-name" required placeholder="Барааны нэр (жнь: Eyfel W-72 50мл)"
           style="background-color:#FFFFFF; color:#09090B;" class="px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
 
@@ -122,26 +129,65 @@
         <input type="number" id="new-price" required placeholder="Үнэ (жнь: 35000)"
           style="background-color:#FFFFFF; color:#09090B;" class="px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
 
-        <input type="url" id="new-image" placeholder="Зургийн линк (https://...)"
-          style="background-color:#FFFFFF; color:#09090B;" class="px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+        <!-- Утаснаас зураг сонгох -->
+        <div class="bg-white p-2.5 rounded-xl border border-slate-300 flex items-center justify-between gap-2">
+          <label class="cursor-pointer bg-zinc-950 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shrink-0">
+            Зураг сонгох
+            <input type="file" id="new-image-file" accept="image/*" onchange="handleFileSelect(event, 'new')" class="hidden">
+          </label>
+          <span id="new-file-status" class="text-[11px] text-zinc-600 truncate font-medium">Зураг сонгоогүй</span>
+        </div>
+
+        <input type="url" id="new-image-url" oninput="handleUrlInput('new')" placeholder="Эсвэл зургийн линк (https://...)"
+          style="background-color:#FFFFFF; color:#09090B;" class="sm:col-span-2 px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+
+        <div id="new-image-preview-wrap" class="sm:col-span-2 hidden items-center gap-3 bg-white p-2.5 rounded-xl border border-slate-200">
+          <img id="new-image-preview" src="" alt="Preview" class="w-14 h-14 rounded-lg object-cover border border-slate-200">
+          <span class="text-[11px] font-semibold text-zinc-700">Сонгосон зураг бэлэн</span>
+          <button type="button" onclick="clearNewImage()" class="ml-auto text-[11px] font-bold text-red-600">Арилгах</button>
+        </div>
 
         <input type="text" id="new-desc" placeholder="Үнэрийн тайлбар (жнь: Жимслэг, зөөлөн үнэртэй)"
           style="background-color:#FFFFFF; color:#09090B;" class="sm:col-span-2 px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
 
-        <button type="submit" style="background-color:#09090B; color:#FFFFFF;" class="sm:col-span-2 py-3 rounded-xl font-bold uppercase tracking-widest hover:bg-zinc-800 transition">
+        <button type="submit" id="add-product-btn" style="background-color:#09090B; color:#FFFFFF;" class="sm:col-span-2 py-3 rounded-xl font-bold uppercase tracking-widest hover:bg-zinc-800 transition">
           Барааг нэмэх
         </button>
       </form>
 
+      <!-- Баннер зураг солих (Утаснаас эсвэл линкээр) -->
       <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between text-xs space-y-3">
-        <div>
-          <h3 class="font-extrabold uppercase tracking-wider text-zinc-950 mb-2">Нүүр баннер зураг солих</h3>
-          <input type="url" id="banner-url-input" placeholder="Зургийн линк оруулах..."
+        <div class="space-y-3">
+          <h3 class="font-extrabold uppercase tracking-wider text-zinc-950">Нүүр баннер зураг солих</h3>
+
+          <div class="bg-white p-2.5 rounded-xl border border-slate-300 flex items-center justify-between gap-2">
+            <label class="cursor-pointer bg-zinc-950 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shrink-0">
+              Утаснаас зураг
+              <input type="file" id="banner-image-file" accept="image/*" onchange="handleFileSelect(event, 'banner')" class="hidden">
+            </label>
+            <span id="banner-file-status" class="text-[11px] text-zinc-600 truncate font-medium">Сонгоогүй</span>
+          </div>
+
+          <input type="url" id="banner-url-input" oninput="handleUrlInput('banner')" placeholder="Эсвэл зургийн линк..."
             style="background-color:#FFFFFF; color:#09090B;" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-medium">
+
+          <img id="banner-preview-img" src="" alt="Banner preview" class="hidden w-full h-28 object-cover rounded-xl border border-slate-200">
         </div>
+
         <button onclick="updateBannerImage()" style="background-color:#09090B; color:#FFFFFF;" class="w-full py-3 rounded-xl font-bold uppercase tracking-widest hover:bg-zinc-800 transition">
           Баннер хадгалах
         </button>
+      </div>
+    </div>
+
+    <!-- Таб 2: Захиалгуудын жагсаалт -->
+    <div id="admin-tab-orders" class="hidden mt-5 space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs font-extrabold uppercase tracking-wider text-zinc-950">Хэрэглэгчдийн захиалга</h3>
+        <button onclick="loadOrdersFromDB()" class="text-xs font-bold underline text-zinc-700">Шинэчлэх</button>
+      </div>
+      <div id="admin-orders-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <p class="text-zinc-500 font-medium">Захиалга ачаалж байна...</p>
       </div>
     </div>
   </section>
@@ -271,14 +317,79 @@
           style="background-color:#F4F5F7; color:#09090B;"
           class="w-full px-4 py-3 rounded-xl border border-slate-300 text-xs font-semibold">
 
-        <button onclick="submitOrder()" style="background-color:#09090B; color:#FFFFFF;" class="w-full py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-zinc-800 transition">
+        <button onclick="submitOrder()" id="submit-order-btn" style="background-color:#09090B; color:#FFFFFF;" class="w-full py-3.5 rounded-full text-xs font-bold uppercase tracking-[0.2em] hover:bg-zinc-800 transition">
           Захиалга баталгаажуулах
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Админ Нэвтрэх Цонх (Лого дээр 3 удаа товшиход нээгдэнэ) -->
+  <!-- Бараа засах модал -->
+  <div id="edit-product-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div onclick="closeEditModal()" class="fixed inset-0 bg-zinc-950/65"></div>
+    <div style="background-color:#FFFFFF; color:#09090B;" class="relative max-w-md mx-auto mt-14 p-6 rounded-3xl border border-slate-200 shadow-2xl z-10">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3.5 mb-4">
+        <h3 class="text-xs font-extrabold uppercase tracking-[0.2em]">Бараа засах</h3>
+        <button onclick="closeEditModal()" class="text-2xl text-zinc-500 hover:text-zinc-950">&times;</button>
+      </div>
+
+      <form onsubmit="saveEditedProduct(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="edit-id">
+
+        <div>
+          <label class="block font-bold text-zinc-700 mb-1">Барааны нэр</label>
+          <input type="text" id="edit-name" required style="background-color:#F4F5F7; color:#09090B;"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold">
+        </div>
+
+        <div>
+          <label class="block font-bold text-zinc-700 mb-1">Ангилал</label>
+          <select id="edit-category" style="background-color:#F4F5F7; color:#09090B;"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold">
+            <option value="eyfel-perfume">Eyfel Сүрчиг</option>
+            <option value="bighill">Bighill Niche</option>
+            <option value="diffuser">Гэрийн диффузер (120мл)</option>
+            <option value="car">Машины үнэртүүлэгч</option>
+            <option value="bundle">Хямдралтай багц</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-zinc-700 mb-1">Үнэ (₮)</label>
+          <input type="number" id="edit-price" required style="background-color:#F4F5F7; color:#09090B;"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold">
+        </div>
+
+        <div>
+          <label class="block font-bold text-zinc-700 mb-1">Зураг солих</label>
+          <div class="flex items-center justify-between gap-2 bg-slate-100 p-2.5 rounded-xl border border-slate-300">
+            <label class="cursor-pointer bg-zinc-950 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold shrink-0">
+              Утаснаас сонгох
+              <input type="file" id="edit-image-file" accept="image/*" onchange="handleFileSelect(event, 'edit')" class="hidden">
+            </label>
+            <span id="edit-file-status" class="text-[11px] text-zinc-600 truncate">Одоогийн зураг хэвээр</span>
+          </div>
+          <input type="url" id="edit-image-url" oninput="handleUrlInput('edit')" placeholder="Эсвэл шинэ зургийн линк..."
+            style="background-color:#F4F5F7; color:#09090B;"
+            class="w-full mt-2 px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold">
+          <img id="edit-image-preview" src="" alt="Edit preview" class="hidden w-16 h-16 mt-2 rounded-lg object-cover border border-slate-200">
+        </div>
+
+        <div>
+          <label class="block font-bold text-zinc-700 mb-1">Тайлбар</label>
+          <input type="text" id="edit-desc" style="background-color:#F4F5F7; color:#09090B;"
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-semibold">
+        </div>
+
+        <button type="submit" id="save-edit-btn" style="background-color:#09090B; color:#FFFFFF;"
+          class="w-full py-3.5 rounded-full font-bold uppercase tracking-[0.2em] hover:bg-zinc-800 transition mt-2">
+          Өөрчлөлт хадгалах
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Админ Нэвтрэх Цонх -->
   <div id="admin-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div onclick="closeAdmin()" class="fixed inset-0 bg-zinc-950/65"></div>
     <div style="background-color:#FFFFFF; color:#09090B;" class="relative max-w-sm mx-auto mt-20 p-7 rounded-3xl border border-slate-200 shadow-2xl z-10">
@@ -309,7 +420,6 @@
   </div>
 
   <script>
-    // Шинэ Supabase төслийн холболт
     const SUPABASE_URL = 'https://htlpxgrsorlcmegnhsuv.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_Jz7zKlSzP8Q3yLm4L7mLww_0moqA9tK';
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -339,14 +449,142 @@
     let logoTapCount = 0;
     let logoTapTimer = null;
 
+    let selectedNewImageData = '';
+    let selectedEditImageData = '';
+    let selectedBannerImageData = '';
+
+    // Утаснаас сонгосон зургийг цэвэрхэн жижигсгэж data URL болгох
+    function compressImageFile(file, maxWidth = 800, quality = 0.75) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let w = img.width;
+            let h = img.height;
+            if (w > maxWidth) {
+              h = Math.round((h * maxWidth) / w);
+              w = maxWidth;
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = ev.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleFileSelect(event, target) {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const compressed = await compressImageFile(file, target === 'banner' ? 1200 : 800, 0.78);
+        if (target === 'new') {
+          selectedNewImageData = compressed;
+          document.getElementById('new-image-url').value = '';
+          document.getElementById('new-file-status').textContent = file.name;
+          const wrap = document.getElementById('new-image-preview-wrap');
+          document.getElementById('new-image-preview').src = compressed;
+          wrap.classList.remove('hidden');
+          wrap.classList.add('flex');
+        } else if (target === 'edit') {
+          selectedEditImageData = compressed;
+          document.getElementById('edit-image-url').value = '';
+          document.getElementById('edit-file-status').textContent = file.name;
+          const prev = document.getElementById('edit-image-preview');
+          prev.src = compressed;
+          prev.classList.remove('hidden');
+        } else if (target === 'banner') {
+          selectedBannerImageData = compressed;
+          document.getElementById('banner-url-input').value = '';
+          document.getElementById('banner-file-status').textContent = file.name;
+          const prev = document.getElementById('banner-preview-img');
+          prev.src = compressed;
+          prev.classList.remove('hidden');
+        }
+      } catch (err) {
+        alert('Зураг уншихад алдаа гарлаа.');
+      }
+    }
+
+    function handleUrlInput(target) {
+      if (target === 'new') {
+        const url = document.getElementById('new-image-url').value.trim();
+        selectedNewImageData = url;
+        document.getElementById('new-file-status').textContent = url ? 'Линк ашиглана' : 'Зураг сонгоогүй';
+        const wrap = document.getElementById('new-image-preview-wrap');
+        if (url) {
+          document.getElementById('new-image-preview').src = url;
+          wrap.classList.remove('hidden');
+          wrap.classList.add('flex');
+        } else {
+          wrap.classList.add('hidden');
+          wrap.classList.remove('flex');
+        }
+      } else if (target === 'edit') {
+        const url = document.getElementById('edit-image-url').value.trim();
+        if (url) {
+          selectedEditImageData = url;
+          document.getElementById('edit-file-status').textContent = 'Шинэ линк';
+          const prev = document.getElementById('edit-image-preview');
+          prev.src = url;
+          prev.classList.remove('hidden');
+        }
+      } else if (target === 'banner') {
+        const url = document.getElementById('banner-url-input').value.trim();
+        selectedBannerImageData = url;
+        document.getElementById('banner-file-status').textContent = url ? 'Линк ашиглана' : 'Сонгоогүй';
+        const prev = document.getElementById('banner-preview-img');
+        if (url) {
+          prev.src = url;
+          prev.classList.remove('hidden');
+        } else {
+          prev.classList.add('hidden');
+        }
+      }
+    }
+
+    function clearNewImage() {
+      selectedNewImageData = '';
+      document.getElementById('new-image-file').value = '';
+      document.getElementById('new-image-url').value = '';
+      document.getElementById('new-file-status').textContent = 'Зураг сонгоогүй';
+      const wrap = document.getElementById('new-image-preview-wrap');
+      wrap.classList.add('hidden');
+      wrap.classList.remove('flex');
+    }
+
     function handleLogoTripleTap() {
       logoTapCount++;
       clearTimeout(logoTapTimer);
       logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1000);
-
       if (logoTapCount >= 3) {
         logoTapCount = 0;
         openAdmin();
+      }
+    }
+
+    function switchAdminTab(tabName) {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => {
+        b.classList.remove('bg-zinc-950', 'text-white');
+        b.classList.add('bg-slate-100', 'text-zinc-800');
+      });
+      const activeBtn = document.getElementById('tab-btn-' + tabName);
+      activeBtn.classList.add('bg-zinc-950', 'text-white');
+      activeBtn.classList.remove('bg-slate-100', 'text-zinc-800');
+
+      document.getElementById('admin-tab-products').classList.toggle('hidden', tabName !== 'products');
+      document.getElementById('admin-tab-orders').classList.toggle('hidden', tabName !== 'orders');
+
+      if (tabName === 'orders') {
+        loadOrdersFromDB();
       }
     }
 
@@ -386,9 +624,14 @@
       grid.innerHTML = filtered.map(p => `
         <div class="pearl-card rounded-2xl p-4 sm:p-5 flex flex-col justify-between relative">
           ${isAdminLoggedIn ? `
-            <button onclick="adminDeleteProduct(${p.id})" class="absolute top-3 right-3 z-10 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
-              Устгах
-            </button>
+            <div class="absolute top-3 right-3 z-10 flex gap-1.5">
+              <button onclick="openEditModal(${p.id})" class="bg-white/95 text-zinc-950 border border-slate-300 text-[10px] font-bold px-2.5 py-1 rounded-full shadow hover:bg-slate-100">
+                Засах
+              </button>
+              <button onclick="adminDeleteProduct(${p.id})" class="bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow hover:bg-red-700">
+                Устгах
+              </button>
+            </div>
           ` : ''}
           <div>
             <div class="aspect-square rounded-xl bg-slate-200/70 border border-slate-300/70 mb-3.5 overflow-hidden flex items-center justify-center">
@@ -418,12 +661,68 @@
       `).join('');
     }
 
+    function openEditModal(id) {
+      const prod = products.find(p => String(p.id) === String(id));
+      if (!prod) return;
+      selectedEditImageData = prod.image || '';
+      document.getElementById('edit-id').value = prod.id;
+      document.getElementById('edit-name').value = prod.name;
+      document.getElementById('edit-category').value = prod.category;
+      document.getElementById('edit-price').value = prod.price;
+      document.getElementById('edit-desc').value = prod.desc || '';
+      document.getElementById('edit-image-file').value = '';
+      document.getElementById('edit-image-url').value = prod.image && prod.image.startsWith('http') ? prod.image : '';
+      document.getElementById('edit-file-status').textContent = prod.image ? 'Одоогийн зураг хадгалагдсан' : 'Зураггүй';
+
+      const prev = document.getElementById('edit-image-preview');
+      if (prod.image) {
+        prev.src = prod.image;
+        prev.classList.remove('hidden');
+      } else {
+        prev.classList.add('hidden');
+      }
+
+      document.getElementById('edit-product-modal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-product-modal').classList.add('hidden');
+    }
+
+    async function saveEditedProduct(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-id').value;
+      const btn = document.getElementById('save-edit-btn');
+      btn.textContent = 'Хадгалж байна...';
+      btn.disabled = true;
+
+      const updatedFields = {
+        name: document.getElementById('edit-name').value.trim(),
+        category: document.getElementById('edit-category').value,
+        price: Number(document.getElementById('edit-price').value),
+        desc: document.getElementById('edit-desc').value.trim(),
+        image: selectedEditImageData
+      };
+
+      const { error } = await db.from('eyfel_products').update(updatedFields).eq('id', id);
+      btn.textContent = 'Өөрчлөлт хадгалах';
+      btn.disabled = false;
+
+      if (error) {
+        alert('Засахад алдаа гарлаа: ' + error.message);
+      } else {
+        closeEditModal();
+        await loadProductsFromDB();
+        alert('Бараа амжилттай шинэчлэгдлээ!');
+      }
+    }
+
     function addToCart(id) {
-      const item = products.find(p => p.id === id);
+      const item = products.find(p => String(p.id) === String(id));
       if (!item) return;
-      const exist = cart.find(c => c.id === id);
+      const exist = cart.find(c => String(c.id) === String(id));
       if (exist) exist.qty += 1;
-      else cart.push({ ...item, qty: 1 });
+      else cart.push({ id: item.id, name: item.name, price: Number(item.price), qty: 1 });
       saveCart();
       document.getElementById('cart-drawer').classList.remove('hidden');
     }
@@ -446,13 +745,13 @@
         box.innerHTML = '<p class="text-center text-zinc-500 font-semibold py-10">Таны сагс хоосон байна.</p>';
       } else {
         box.innerHTML = cart.map((c, i) => {
-          sub += c.price * c.qty;
+          sub += Number(c.price) * c.qty;
           qty += c.qty;
           return `
             <div class="flex justify-between items-center border-b border-slate-200 pb-3">
               <div>
                 <p class="font-bold text-zinc-950">${c.name}</p>
-                <p class="text-zinc-600 font-semibold">${c.price.toLocaleString()}₮ × ${c.qty}</p>
+                <p class="text-zinc-600 font-semibold">${Number(c.price).toLocaleString()}₮ × ${c.qty}</p>
               </div>
               <button onclick="removeCart(${i})" class="text-red-600 text-xs font-bold">Устгах</button>
             </div>
@@ -474,16 +773,115 @@
       }
     }
 
-    function submitOrder() {
+    async function submitOrder() {
       const phone = document.getElementById('customer-phone').value.trim();
       const address = document.getElementById('customer-address').value.trim();
       if (cart.length === 0) return alert('Сагс хоосон байна.');
       if (!phone || !address) return alert('Утасны дугаар болон хаягаа оруулна уу.');
 
-      alert(`Баярлалаа! Таны захиалга бүртгэгдлээ.\nУтас: ${phone}\nБид удахгүй холбогдож баталгаажуулна.`);
+      let sub = 0;
+      cart.forEach(c => sub += Number(c.price) * c.qty);
+      const ship = sub >= 150000 ? 0 : 7000;
+      const total = sub + ship;
+
+      const btn = document.getElementById('submit-order-btn');
+      btn.textContent = 'Илгээж байна...';
+      btn.disabled = true;
+
+      const { error } = await db.from('eyfel_orders').insert([{
+        phone,
+        address,
+        items: cart,
+        subtotal: sub,
+        shipping: ship,
+        total,
+        status: 'Шинэ захиалга'
+      }]);
+
+      btn.textContent = 'Захиалга баталгаажуулах';
+      btn.disabled = false;
+
+      if (error) {
+        alert('Захиалга хадгалахад алдаа гарлаа: ' + error.message);
+        return;
+      }
+
+      alert(`Баярлалаа! Таны захиалга амжилттай бүртгэгдлээ.\nУтас: ${phone}\nНийт дүн: ${total.toLocaleString()}₮`);
       cart = [];
       saveCart();
+      document.getElementById('customer-phone').value = '';
+      document.getElementById('customer-address').value = '';
       toggleCart();
+      if (isAdminLoggedIn) {
+        loadOrdersFromDB();
+      }
+    }
+
+    async function loadOrdersFromDB() {
+      const listEl = document.getElementById('admin-orders-list');
+      const badgeEl = document.getElementById('admin-order-badge');
+
+      const { data, error } = await db.from('eyfel_orders').select('*').order('created_at', { ascending: false });
+      if (error) {
+        listEl.innerHTML = `<p class="text-red-600 font-semibold">Захиалга уншихад алдаа: ${error.message}</p>`;
+        return;
+      }
+
+      const orders = data || [];
+      badgeEl.textContent = orders.length;
+
+      if (orders.length === 0) {
+        listEl.innerHTML = '<p class="text-zinc-500 font-medium">Одоогоор захиалга ирээгүй байна.</p>';
+        return;
+      }
+
+      listEl.innerHTML = orders.map(o => {
+        const itemsText = Array.isArray(o.items)
+          ? o.items.map(it => `• ${it.name} (${Number(it.price).toLocaleString()}₮ × ${it.qty})`).join('<br>')
+          : '';
+        const dateStr = o.created_at ? new Date(o.created_at).toLocaleString('mn-MN') : '';
+        return `
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-extrabold text-zinc-950 text-sm">📞 ${o.phone}</span>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ${o.status === 'Хүргэгдсэн' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}">
+                ${o.status || 'Шинэ захиалга'}
+              </span>
+            </div>
+            <p class="text-zinc-700 font-semibold">📍 ${o.address}</p>
+            <div class="bg-white p-3 rounded-xl border border-slate-200 text-zinc-800 leading-relaxed">
+              ${itemsText}
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <div>
+                <span class="text-zinc-500 text-[11px] block">${dateStr}</span>
+                <span class="font-extrabold text-zinc-950 text-sm">Нийт: ${Number(o.total).toLocaleString()}₮</span>
+              </div>
+              <div class="flex gap-2">
+                ${o.status !== 'Хүргэгдсэн' ? `
+                  <button onclick="updateOrderStatus(${o.id}, 'Хүргэгдсэн')" class="bg-zinc-950 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold">
+                    Хүргэгдсэн
+                  </button>
+                ` : ''}
+                <button onclick="deleteOrder(${o.id})" class="text-red-600 border border-red-200 bg-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold">
+                  Устгах
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function updateOrderStatus(id, status) {
+      await db.from('eyfel_orders').update({ status }).eq('id', id);
+      loadOrdersFromDB();
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm('Энэ захиалгыг устгах уу?')) return;
+      await db.from('eyfel_orders').delete().eq('id', id);
+      loadOrdersFromDB();
     }
 
     async function checkAdminSession() {
@@ -527,6 +925,7 @@
       document.getElementById('inline-admin-bar').classList.remove('hidden');
       document.getElementById('admin-logged-email').textContent = email;
       renderProducts();
+      loadOrdersFromDB();
     }
 
     async function handleAdminLogout() {
@@ -538,19 +937,27 @@
 
     async function adminAddProduct(e) {
       e.preventDefault();
+      const btn = document.getElementById('add-product-btn');
+      btn.textContent = 'Нэмж байна...';
+      btn.disabled = true;
+
       const newItem = {
-        name: document.getElementById('new-name').value,
+        name: document.getElementById('new-name').value.trim(),
         category: document.getElementById('new-category').value,
         price: Number(document.getElementById('new-price').value),
-        image: document.getElementById('new-image').value,
-        desc: document.getElementById('new-desc').value
+        image: selectedNewImageData || document.getElementById('new-image-url').value.trim(),
+        desc: document.getElementById('new-desc').value.trim()
       };
 
       const { error } = await db.from('eyfel_products').insert([newItem]);
+      btn.textContent = 'Барааг нэмэх';
+      btn.disabled = false;
+
       if (error) {
         alert('Supabase алдаа: ' + error.message);
       } else {
         e.target.reset();
+        clearNewImage();
         await loadProductsFromDB();
         alert('Бараа амжилттай нэмэгдлээ!');
       }
@@ -563,9 +970,9 @@
     }
 
     function updateBannerImage() {
-      const url = document.getElementById('banner-url-input').value.trim();
-      if (!url) return alert('Зургийн линк оруулна уу.');
-      localStorage.setItem('eyfel_banner', url);
+      const val = selectedBannerImageData || document.getElementById('banner-url-input').value.trim();
+      if (!val) return alert('Утаснаас зураг сонгох эсвэл линк оруулна уу.');
+      localStorage.setItem('eyfel_banner', val);
       applySavedBanner();
       alert('Баннер зураг солигдлоо!');
     }
